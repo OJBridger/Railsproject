@@ -1,4 +1,4 @@
-class ArticlesController < ApplicationController
+class CommentsController < ApplicationController
 	include ArticlesHelper
 
 	def index
@@ -16,12 +16,16 @@ class ArticlesController < ApplicationController
 	end
 
 	def create
- 		@article = Article.new(article_params)
-    	@article.save
+  		@comment = Comment.new(comment_params)
+  		@comment.article_id = params[:article_id]
 
-    	flash.notice = "Article '#{@article.title}' created."
+  		@comment.save
 
-    	redirect_to article_path(@article)
+  		redirect_to article_path(@comment.article)
+	end
+
+	def comment_params
+ 		params.require(:comment).permit(:author_name, :body)
 	end
 
 	def destroy
